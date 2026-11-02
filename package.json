@@ -1,0 +1,14 @@
+{
+  "name": "assignment-8-rest-api",
+  "version": "1.0.0",
+  "description": "A simple REST API built with Node.js and Express for Assignment 8.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["nodejs", "express", "rest-api"],
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
