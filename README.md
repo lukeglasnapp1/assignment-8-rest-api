@@ -1,69 +1,89 @@
-# Assignment 8 - Node.js and Express REST API
+# Database-Backed Express REST API
 
 ## Description
 
-This project is a basic REST API built with Node.js and Express. It manages an in-memory collection of resources. Each resource has an ID, a name, and a completed status.
+This project extends the earlier Express REST API by using **MongoDB Atlas** to store data permanently. The API no longer uses an in-memory array. Items are saved as documents in the MongoDB `items` collection, so changes remain after the server restarts.
+
+Each item has:
+- `_id`: unique MongoDB document identifier
+- `name`: required string
+- `description`: optional string (defaults to an empty string)
+- `completed`: boolean (defaults to `false`)
+- `createdAt` and `updatedAt`: timestamps added by Mongoose
 
 ## Requirements
 
-- Node.js and npm
-- Express
+- Node.js 18 or newer
+- npm
+- A MongoDB Atlas cluster and database user
 
-## Setup
+## MongoDB Atlas setup
 
-1. Clone this repository.
-2. Open the project folder in a terminal.
-3. Install dependencies:
+1. Sign in to [MongoDB Atlas](https://www.mongodb.com/atlas) and create a free cluster if you do not already have one.
+2. Create a database user with a username and password.
+3. In **Network Access**, allow your current IP address.
+4. Select **Connect > Drivers**, choose Node.js, and copy the connection string.
+5. In the project folder, copy `.env.example` to a new file named `.env`.
+6. Replace the placeholder in `MONGODB_URI` with your Atlas connection string. Include your database name, for example `assignment9`, before the query parameters.
+7. Do not commit or share the `.env` file. It is excluded by `.gitignore`.
 
-   ```bash
-   npm install
-   ```
+Example local configuration:
 
-4. Start the server:
+```env
+MONGODB_URI=mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER/assignment9?retryWrites=true&w=majority
+PORT=3000
+```
 
-   ```bash
-   npm start
-   ```
+URL-encode special characters in the database password when required.
 
-The server runs at http://localhost:3000.
+## Install and start
 
-## API Endpoints
+```bash
+npm install
+npm start
+```
+
+When the connection succeeds, the terminal prints `Connected to MongoDB` and the API listens at `http://localhost:3000`.
+
+## API endpoints
 
 | Method | Endpoint | Description | Success status |
 |---|---|---|---|
-| GET | `/api/resources` | Get all resources | 200 |
-| GET | `/api/resources/:id` | Get one resource | 200 |
-| POST | `/api/resources` | Create a resource | 201 |
-| PUT | `/api/resources/:id` | Replace a resource's fields | 200 |
-| DELETE | `/api/resources/:id` | Delete a resource | 200 |
+| GET | `/api/items` | Return all items from MongoDB | 200 |
+| GET | `/api/items/:id` | Return one item by MongoDB ObjectId | 200 |
+| POST | `/api/items` | Validate and insert a new item | 201 |
+| PUT | `/api/items/:id` | Update supplied fields on an existing item | 200 |
+| DELETE | `/api/items/:id` | Permanently delete an item | 200 |
 
-### Example resource
+### Example POST body
 
 ```json
 {
-  "id": 1,
-  "name": "Study for exam",
+  "name": "Study for operating systems",
+  "description": "Review synchronization and deadlocks",
   "completed": false
 }
 ```
 
-### POST and PUT request body
+### Example partial PUT body
 
 ```json
 {
-  "name": "Practice API testing",
-  "completed": false
+  "completed": true
 }
 ```
 
-The API validates the name and completed value. It returns 400 for invalid input and 404 when a requested ID does not exist.
+The API returns `400 Bad Request` for invalid IDs or invalid request data, and `404 Not Found` when a valid ID does not match a stored item.
 
-## Middleware
+## Implementation details
 
-- `express.json()` parses JSON request bodies.
-- A custom middleware logs the timestamp, HTTP method, and requested URL.
-- Error-handling middleware returns a useful response for invalid JSON and unexpected server errors.
+- Express parses JSON request bodies with `express.json()`.
+- A custom middleware logs the timestamp, HTTP method, and URL for every request.
+- Mongoose defines and validates the item document schema.
+- All five routes read or write directly to MongoDB using Mongoose queries.
+- The database connection is read from an environment variable instead of being hard-coded.
+- Error-handling middleware returns useful client errors and a generic response for unexpected server errors.
 
-## Notes
+## Testing
 
-Data is stored in memory, so changes are reset when the server restarts. This project is intended as a basic REST API assignment and does not use a database.
+Open `requests.http` in VS Code with the REST Client extension installed. Follow the instructions in [TESTING.md](TESTING.md). Add your own screenshots or copied responses to the Canvas submission after running the requests against your Atlas database.
