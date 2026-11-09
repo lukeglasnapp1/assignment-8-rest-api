@@ -1,0 +1,3 @@
+Design Choices & Reflection
+
+I chose MongoDB Atlas because this project stores simple item records, and MongoDB's document format fits naturally with the JavaScript objects used by Express. I liked that I could keep each item's name, description, and completed status together in one document, and Mongoose makes it easier to validate those fields before saving them. I used ChatGPT to help refactor the original in-memory Express routes into MongoDB-backed routes, add the Mongoose schema and validation, and prepare the setup and API testing instructions. I still need to connect my own Atlas database and run the requests so I can capture real test screenshots.
