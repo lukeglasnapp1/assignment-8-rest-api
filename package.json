@@ -1,14 +1,25 @@
 {
-  "name": "assignment-8-rest-api",
-  "version": "1.0.0",
-  "description": "A simple REST API built with Node.js and Express for Assignment 8.",
+  "name": "assignment-8-mongodb-api",
+  "version": "2.0.0",
+  "description": "Express REST API with persistent MongoDB storage.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node --watch server.js"
   },
-  "keywords": ["nodejs", "express", "rest-api"],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "mongodb",
+    "rest-api"
+  ],
   "license": "ISC",
   "dependencies": {
-    "express": "^5.1.0"
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.1"
   }
 }
