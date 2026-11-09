@@ -1,0 +1,39 @@
+### MongoDB Express REST API - REST Client requests
+### Start the server with: npm start
+### Replace the itemId value after the POST request with the returned MongoDB _id.
+
+@baseUrl = http://localhost:3000
+@itemId = REPLACE_WITH_MONGODB_OBJECT_ID
+
+### 1. Get all items
+GET {{baseUrl}}/api/items
+
+### 2. Create an item (copy its returned _id into @itemId above)
+POST {{baseUrl}}/api/items
+Content-Type: application/json
+
+{
+  "name": "Study for operating systems",
+  "description": "Review synchronization and deadlocks",
+  "completed": false
+}
+
+### 3. Get one item
+GET {{baseUrl}}/api/items/{{itemId}}
+
+### 4. Update one or more fields
+PUT {{baseUrl}}/api/items/{{itemId}}
+Content-Type: application/json
+
+{
+  "completed": true
+}
+
+### 5. Delete the item
+DELETE {{baseUrl}}/api/items/{{itemId}}
+
+### 6. Confirm a deleted/nonexistent item returns 404
+GET {{baseUrl}}/api/items/000000000000000000000000
+
+### 7. Invalid ID returns 400
+GET {{baseUrl}}/api/items/not-an-object-id
